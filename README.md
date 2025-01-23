@@ -4,8 +4,9 @@ Curso da Alura ensinando a utilizar o JUnit para escrever e executar testes unit
 
 # Sumário
 
-1. [TDD]()
-2. [JUnit]()
+1. [TDD](#tdd)
+2. [O que são Testes Unitários?](#o-que-são-testes-unitários)
+3. [JUnit](#junit)
 
 # TDD
 
