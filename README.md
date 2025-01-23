@@ -1,11 +1,14 @@
 # Java e TDD: Testes unitários com JUnit
+
 Curso da Alura ensinando a utilizar o JUnit para escrever e executar testes unitários utilizando a linguagem Java com gerenciador de pacotes Maven.
 
 # Sumário
+
 1. [TDD]()
 2. [JUnit]()
 
 # TDD
+
 **TDD**, ou Desenvolvimento Orientado a Testes (em inglês, *Test-Driven Development*), é uma prática de desenvolvimento de software que inverte a ordem tradicional de codificação. Em vez de escrever o código primeiro e depois os testes, o **TDD** prega que você deve escrever os testes ***antes*** do código da funcionalidade. Isso pode parecer estranho no início, mas traz inúmeros benefícios para a qualidade e a manutenibilidade do software.
 
 ## O Ciclo Red-Green-Refactor:
@@ -59,7 +62,102 @@ Imagine que você precisa criar uma função que calcula a área de um retângul
 
 [Sumário](#sumário)
 
+# O que são Testes Unitários?
+
+Testes unitários focam em testar partes isoladas do código, como métodos, funções ou classes. O objetivo é verificar se cada unidade executa sua função corretamente, independentemente de outras partes do sistema. Isso ajuda a identificar erros cedo no processo de desenvolvimento, facilitando a correção e reduzindo o custo de manutenção a longo prazo.
+
+[Sumário](#sumário)
+
 # JUnit
 
+**JUnit** é um _framework_ popular para testes unitários em Java. Ele fornece uma estrutura para escrever e executar testes automatizados, garantindo que pequenas partes isoladas do seu código (unidades) funcionem corretamente. É uma ferramenta fundamental para o Desenvolvimento Orientado a Testes (**TDD**) e para manter a qualidade do código em projetos Java.
+
+## Como o JUnit Funciona?
+
+O **JUnit** oferece uma estrutura para definir e executar testes. Os testes são escritos em classes chamadas *classes de teste*, que geralmente seguem a convenção de nomenclatura `NomeDaClasseTest`. Dentro dessas classes, você define métodos de teste, anotados com `@Test`, que contêm asserções (_assertions_). As asserções comparam o resultado real da execução do código com o resultado esperado.
+
+**Exemplo Básico:**
+
+Suponha que você tenha uma classe `Calculadora` com um método `somar()`:
+
+```java
+public class Calculadora {
+    public int somar(int a, int b) {
+        return a + b;
+    }
+}
+```
+
+Um teste unitário usando **JUnit** para esse método seria:
+
+```java
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CalculadoraTest {
+
+    @Test
+    void testSomarNumerosPositivos() {
+        Calculadora calc = new Calculadora();
+        int resultado = calc.somar(2, 3);
+        assertEquals(5, resultado);
+    }
+
+    @Test
+    void testSomarNumeroComZero() {
+        Calculadora calc = new Calculadora();
+        int resultado = calc.somar(5, 0);
+        assertEquals(5, resultado);
+    }
+
+    @Test
+    void testSomarNumerosNegativos() {
+        Calculadora calc = new Calculadora();
+        int resultado = calc.somar(-2, -3);
+        assertEquals(-5, resultado);
+    }
+
+    @Test
+    void testSomarComNumerosGrandes() {
+        Calculadora calc = new Calculadora();
+        int resultado = calc.somar(Integer.MAX_VALUE, 1);
+        assertEquals(Integer.MIN_VALUE, resultado); // Overflow intencional para teste
+    }
+}
+```
+
+**Explicação do Exemplo:**
+
+*   `@Test`: Anotação que marca um método como um método de teste.
+*   `assertEquals(esperado, resultado)`: Uma asserção que verifica se o valor `resultado` é igual ao valor `esperado`. Existem diversas outras asserções no **JUnit**.
+*   `Calculadora calc = new Calculadora();`: Cria uma instância da classe que será testada.
+*   `int resultado = calc.somar(2, 3);`: Executa o método a ser testado.
+
+**Executando Testes com JUnit:**
+
+**JUnit** pode ser executado de várias maneiras:
+
+*   **IDEs (Integrated Development Environments):** A maioria das IDEs Java, como Eclipse, IntelliJ IDEA e NetBeans, possui suporte integrado para executar testes **JUnit**.
+*   **Linha de comando:** Usando o **JUnit** Launcher.
+*   **Ferramentas de build:** Como Maven e Gradle, que automatizam a execução de testes durante o processo de _build_.
+
+**Principais Recursos do JUnit:**
+
+*   **Asserções:** Um conjunto rico de asserções para verificar diferentes condições (igualdade, desigualdade, verdadeiro, falso, exceções, etc.).
+*   **Fixtures:** Mecanismos para configurar o ambiente de teste antes de cada teste (`@BeforeEach` ou `@Before`) e limpar após cada teste (`@AfterEach` ou `@After`).
+*   **Suítes de Testes:** Permitem agrupar vários testes em uma única execução.
+*   **Parametrização de Testes:** Permite executar o mesmo teste com diferentes conjuntos de dados usando `@ParameterizedTest` e `@ValueSource`/`@MethodSource`.
+*   **Testes com Timeout:** Permitem definir um tempo máximo para a execução de um teste.
+*   **Extensões:** JUnit 5 introduziu um sistema de extensões que permite adicionar funcionalidades extras ao framework.
+
+**Benefícios do Uso do JUnit:**
+
+*   **Melhora a qualidade do código:** Ajuda a identificar erros precocemente e garante que o código funcione conforme o esperado.
+*   **Facilita a refatoração:** Permite refatorar o código com segurança, sabendo que os testes irão detectar qualquer regressão.
+*   **Documentação viva:** Os testes servem como uma forma de documentação executável, mostrando como o código deve se comportar.
+*   **Suporte ao TDD:** É uma ferramenta essencial para praticar o Desenvolvimento Orientado a Testes.
+*   **Integração contínua:** Facilita a integração com ferramentas de CI/CD, automatizando a execução dos testes em cada commit.
+
+**JUnit** é uma ferramenta poderosa e essencial para desenvolvedores Java que buscam produzir código de alta qualidade. Dominar o **JUnit** e a prática de testes unitários é um investimento valioso para qualquer projeto Java.
 
 [Sumário](#sumário)
