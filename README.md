@@ -7,6 +7,7 @@ Curso da Alura ensinando a utilizar o JUnit para escrever e executar testes unit
 1. [TDD](#tdd)
 2. [O que são Testes Unitários?](#o-que-são-testes-unitários)
 3. [JUnit](#junit)
+4. [Fixtures no JUnit](#fixtures-no-junit)
 
 # TDD
 
@@ -160,5 +161,104 @@ public class CalculadoraTest {
 *   **Integração contínua:** Facilita a integração com ferramentas de CI/CD, automatizando a execução dos testes em cada commit.
 
 **JUnit** é uma ferramenta poderosa e essencial para desenvolvedores Java que buscam produzir código de alta qualidade. Dominar o **JUnit** e a prática de testes unitários é um investimento valioso para qualquer projeto Java.
+
+[Sumário](#sumário)
+
+
+# Fixtures no JUnit
+
+Em JUnit, *Fixtures* são um mecanismo para configurar o ambiente de teste *antes* da execução dos testes e limpá-lo *depois*. Eles garantem que cada teste seja executado em um estado conhecido e consistente, evitando interferências entre os testes e tornando-os mais confiáveis e repetíveis.
+
+**Por que usar Fixtures?**
+
+Imagine que você está testando uma classe que interage com um banco de dados. Você não quer que cada teste insira e remova dados diretamente no banco de dados, pois isso pode levar a problemas de dependência entre os testes e dificultar a análise dos resultados. Com Fixtures, você pode configurar o estado inicial do banco de dados antes de cada teste e limpá-lo após a execução, garantindo que cada teste comece com um banco de dados limpo e previsível.
+
+**Anotações e Métodos para Fixtures no JUnit 5 (Jupiter):**
+
+JUnit 5 (Jupiter) introduziu novas anotações para Fixtures, tornando o código mais legível e flexível. As principais são:
+
+*   `@BeforeEach`: Anotado em um método que será executado *antes* de cada método de teste (`@Test`). É usado para configurar o ambiente de teste para cada teste individualmente.
+*   `@AfterEach`: Anotado em um método que será executado *após* a execução de cada método de teste (`@Test`). É usado para limpar o ambiente de teste e desfazer as alterações feitas durante o teste.
+*   `@BeforeAll`: Anotado em um método *estático* que será executado *uma única vez, antes de todos* os métodos de teste da classe. É usado para realizar configurações que são comuns a todos os testes e que não precisam ser repetidas antes de cada um.
+*   `@AfterAll`: Anotado em um método *estático* que será executado *uma única vez, após a execução de todos* os métodos de teste da classe. É usado para limpar recursos que foram alocados durante a configuração global.
+
+**Exemplo Prático com JUnit 5:**
+
+```java
+import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ListaDeComprasTest {
+
+    private List<String> listaDeCompras;
+
+    @BeforeEach // Executa antes de CADA teste
+    void setUp() {
+        System.out.println("Configurando a lista de compras...");
+        listaDeCompras = new ArrayList<>();
+        listaDeCompras.add("Maçã");
+        listaDeCompras.add("Banana");
+    }
+
+    @AfterEach // Executa depois de CADA teste
+    void tearDown() {
+        System.out.println("Limpando a lista de compras...");
+        listaDeCompras.clear();
+    }
+
+    @BeforeAll // Executa UMA VEZ antes de TODOS os testes
+    static void setUpAll() {
+        System.out.println("Configurando ambiente de testes...");
+        // Ex: Conectar a um banco de dados de teste
+    }
+
+    @AfterAll // Executa UMA VEZ depois de TODOS os testes
+    static void tearDownAll() {
+        System.out.println("Limpando ambiente de testes...");
+        // Ex: Desconectar do banco de dados de teste
+    }
+
+    @Test
+    void testAdicionarItem() {
+        listaDeCompras.add("Laranja");
+        assertEquals(3, listaDeCompras.size());
+        assertTrue(listaDeCompras.contains("Laranja"));
+        System.out.println("Testando adicionar item...");
+    }
+
+    @Test
+    void testRemoverItem() {
+        listaDeCompras.remove("Banana");
+        assertEquals(1, listaDeCompras.size());
+        assertFalse(listaDeCompras.contains("Banana"));
+        System.out.println("Testando remover item...");
+    }
+}
+```
+
+**Explicação do Exemplo:**
+
+*   `@BeforeEach`: O método `setUp()` é executado antes de cada teste (`testAdicionarItem` e `testRemoverItem`). Ele cria uma nova lista de compras e adiciona dois itens a ela, garantindo que cada teste comece com a mesma lista inicial.
+*   `@AfterEach`: O método `tearDown()` é executado após cada teste. Ele limpa a lista de compras, evitando que as alterações feitas por um teste afetem outros testes.
+*   `@BeforeAll` e `@AfterAll`: Os métodos `setUpAll()` e `tearDownAll()` são executados apenas uma vez, antes do início de todos os testes e após o término de todos os testes, respectivamente. Eles são úteis para configurações globais, como conexões com banco de dados ou inicialização de recursos pesados.
+
+**Diferenças entre JUnit 4 e JUnit 5:**
+
+Em JUnit 4, as anotações equivalentes eram:
+
+*   `@Before`: Equivalente a `@BeforeEach`.
+*   `@After`: Equivalente a `@AfterEach`.
+*   `@BeforeClass`: Equivalente a `@BeforeAll`.
+*   `@AfterClass`: Equivalente a `@AfterAll`.
+
+**Quando usar `@BeforeAll` e `@AfterAll`?**
+
+Use `@BeforeAll` e `@AfterAll` com cautela. Eles são apropriados para configurações que são realmente globais e custosas de serem repetidas a cada teste. Em geral, é preferível usar `@BeforeEach` e `@AfterEach` para isolar os testes o máximo possível.
+
+**Em resumo:**
+
+Fixtures são uma parte essencial do JUnit, permitindo que você escreva testes mais limpos, confiáveis e independentes. Ao usar as anotações `@BeforeEach`, `@AfterEach`, `@BeforeAll` e `@AfterAll`, você garante que o ambiente de teste esteja sempre em um estado consistente, facilitando a detecção de erros e a manutenção do seu código.
 
 [Sumário](#sumário)

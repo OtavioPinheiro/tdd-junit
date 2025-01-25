@@ -6,8 +6,8 @@ import java.time.LocalDate;
 
 public class Funcionario {
 
-	private String nome;
-	private LocalDate dataAdmissao;
+	private final String nome;
+	private final LocalDate dataAdmissao;
 	private BigDecimal salario;
 
 	public Funcionario(String nome, LocalDate dataAdmissao, BigDecimal salario) {
